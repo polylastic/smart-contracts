@@ -11,7 +11,7 @@ _This novel mechanism allows us to capture both technical innovation and communi
 - **Verified source code:** https://bscscan.com/address/0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0#code
 
 
-### Developement instructions
+### Development instructions
 
 - `$ yarn install` - _Install all dependencies_
 - `$ echo PK="PRIVATE_KEY" > .env` - _Add testing private key_

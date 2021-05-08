@@ -6,3 +6,5 @@ artifacts
 
 .idea/
 node_modules/
+.env
+yarn.lock

@@ -5,6 +5,7 @@ cache
 artifacts
 
 .idea/
+.DS_Store
 node_modules/
 .env
 yarn.lock

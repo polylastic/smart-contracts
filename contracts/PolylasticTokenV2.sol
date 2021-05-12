@@ -24,7 +24,7 @@ contract PolylasticTokenV2 is Context, IERC20 {
     string private _symbol;
     uint8 private _decimals;
 
-    mapping (address => bool) isAddressWhitelisted;
+    mapping (address => bool) public isAddressWhitelisted;
 
 
     constructor (

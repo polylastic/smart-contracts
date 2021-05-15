@@ -2,7 +2,7 @@ pragma solidity ^0.6.12;
 
 import "./IERC20.sol";
 
-contract AirdropContract {
+contract Airdrop {
 
     IERC20 public airdropToken;
 

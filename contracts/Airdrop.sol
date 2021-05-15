@@ -15,17 +15,22 @@ contract Airdrop {
 
     mapping (address => bool) public wasClaimed;
 
+    event TokensAirdropped(address beneficiary, uint256 amount);
+
     constructor(address _signerAddress, uint256 _airdropAmountPerWallet) public {
         signerAddress = _signerAddress;
         airdropAmountPerWallet = _airdropAmountPerWallet;
     }
 
     function withdrawTokens(bytes memory signature) public {
-        require(checkSignature(signature, msg.sender) == true, "Not eligible to claim tokens!");
-        require(wasClaimed[msg.sender] == false, "Already claimed!");
+        address beneficiary = msg.sender;
 
-        airdropToken.transfer(msg.sender, airdropAmountPerWallet);
+        require(checkSignature(signature, beneficiary) == true, "Not eligible to claim tokens!");
+        require(wasClaimed[beneficiary] == false, "Already claimed!");
 
+        airdropToken.transfer(beneficiary, airdropAmountPerWallet);
+
+        emit TokensAirdropped(beneficiary, airdropAmountPerWallet);
         wasClaimed[msg.sender] = true;
     }
 

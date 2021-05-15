@@ -30,7 +30,7 @@ contract TokenSwapPortal {
     function swapToken() public {
         uint amount = tokenToReceive.balanceOf(msg.sender);
         tokenToReceive.transferFrom(msg.sender, address(this), amount);
-        tokenToSend.transfer(msg.sender, address(this));
+        tokenToSend.transfer(msg.sender, amount);
         totalTokensSwapped = totalTokensSwapped.add(amount);
     }
 

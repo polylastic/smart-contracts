@@ -124,7 +124,7 @@ contract PolylasticTokenV2 is Context, IERC20 {
     {
         uint fee = computeTransferFeeInTokens(amountOfTokensToTransfer);
         // Return fee % in WEI units
-        return fee.mul(10**18).div(amountOfTokensToTransfer).mul(100);
+        return fee.mul(10**18).mul(100).div(amountOfTokensToTransfer);
     }
 
 
@@ -145,7 +145,7 @@ contract PolylasticTokenV2 is Context, IERC20 {
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-        uint transferFee = computeTransferFee(recipient, _msgSender(), amount);
+        uint transferFee = computeTransferFee(_msgSender(), recipient, amount);
 
         if(transferFee > 0) {
             _transfer(_msgSender(), treasury, transferFee);

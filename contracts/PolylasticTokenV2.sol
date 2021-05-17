@@ -131,18 +131,16 @@ contract PolylasticTokenV2 is Context, IERC20 {
     /**
      * @notice Function to compute square root of a number
      */
-    function sqrt(
-        uint x
-    )
-    internal
-    pure
-    returns (uint y)
-    {
-        uint z = (x + 1) / 2;
-        y = x;
-        while (z < y) {
-            y = z;
-            z = (x / z + z) / 2;
+    function sqrt(uint y) internal pure returns (uint z) {
+        if (y > 3) {
+            z = y;
+            uint x = y / 2 + 1;
+            while (x < z) {
+                z = x;
+                x = (y / x + x) / 2;
+            }
+        } else if (y != 0) {
+            z = 1;
         }
     }
 

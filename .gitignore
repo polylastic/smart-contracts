@@ -4,6 +4,8 @@ node_modules
 cache
 artifacts
 
+scripts/config.json
+
 .idea/
 .DS_Store
 node_modules/

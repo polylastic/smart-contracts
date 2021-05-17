@@ -1,4 +1,5 @@
 const hre = require("hardhat");
+const { getSavedContractAddresses, saveContractAddress } = require('./utils')
 
 async function main() {
     const tokenName = "Polylastic";
@@ -10,6 +11,7 @@ async function main() {
     const token = await PolylasticTokenV2.deploy(tokenName, symbol, totalSupply, decimals);
     await token.deployed();
     console.log("PolylasticTokenV2 deployed to:", token.address);
+    saveContractAddress(hre.network.name, 'PolylasticTokenV2', token.address);
 }
 
 

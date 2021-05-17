@@ -17,9 +17,10 @@ contract Airdrop {
 
     event TokensAirdropped(address beneficiary, uint256 amount);
 
-    constructor(address _signerAddress, uint256 _airdropAmountPerWallet) public {
+    constructor(address _signerAddress, uint256 _airdropAmountPerWallet, address _airdropToken) public {
         signerAddress = _signerAddress;
         airdropAmountPerWallet = _airdropAmountPerWallet;
+        airdropToken = IERC20(_airdropToken);
     }
 
     function withdrawTokens(bytes memory signature) public {

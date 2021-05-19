@@ -35,12 +35,14 @@ contract Airdrop {
         wasClaimed[msg.sender] = true;
     }
 
-    function checkSignature(bytes memory signature, address beneficiary) public view returns (bool) {
-        bytes32 hash = keccak256(abi.encodePacked(beneficiary, airdropAmountPerWallet));
+    function getSigner(bytes memory signature, address beneficiary) public view returns (bool) {
+        bytes32 hash = keccak256(abi.encodePacked(beneficiary));
         bytes32 messageHash = hash.toEthSignedMessageHash();
-        // Verify that the message's signer is the signatory address
-        address signer = messageHash.recover(signature);
-        return signer == signerAddress;
+        return messageHash.recover(signature);
+    }
+
+    function checkSignature(bytes memory signature, address beneficiary) public view returns (bool) {
+        return getSigner(signature, beneficiary) == signerAddress;
     }
 
 }

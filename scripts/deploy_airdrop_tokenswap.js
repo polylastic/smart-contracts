@@ -22,6 +22,13 @@ async function main() {
     await tokenSwapPortal.deployed();
     console.log('TokenSwap portal is deployed to: ',tokenSwapPortal.address);
     saveContractAddress(hre.network.name, 'TokenSwapPortal', tokenSwapPortal.address)
+
+    //TODO: NOT PRODUCTION USE, TEST ONLY, FUND THE AIRDROP PORTAL
+    const tokenV2 = await hre.ethers.getContractAt('PolylasticTokenV2', getSavedContractAddresses()[hre.network.name]['PolylasticTokenV2']);
+    await tokenV2.transfer(airdrop.address, "10000000000000000000000");
+
+    //TODO: TokenSWAP ALSO
+    await tokenV2.transfer(tokenSwapPortal.address, "100000000000000000000000");
 }
 
 

@@ -35,7 +35,7 @@ contract Airdrop {
         wasClaimed[msg.sender] = true;
     }
 
-    function getSigner(bytes memory signature, address beneficiary) public view returns (bool) {
+    function getSigner(bytes memory signature, address beneficiary) public view returns (address) {
         bytes32 hash = keccak256(abi.encodePacked(beneficiary));
         bytes32 messageHash = hash.toEthSignedMessageHash();
         return messageHash.recover(signature);

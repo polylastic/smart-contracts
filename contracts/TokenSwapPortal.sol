@@ -6,7 +6,7 @@ import "./math/SafeMath.sol";
 
 contract TokenSwapPortal {
 
-    using SafeMath for *;
+    using SafeMath for uint256;
 
     address public deployer;
     // Token which will be taken from users and burned

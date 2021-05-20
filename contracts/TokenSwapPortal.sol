@@ -20,6 +20,9 @@ contract TokenSwapPortal {
         address _tokenToReceive,
         address _tokenToSend
     ) public {
+        require(_tokenToReceive != address(0));
+        require(_tokenToSend != address(0));
+
         deployer = msg.sender;
 
         tokenToReceive = IERC20(_tokenToReceive);
@@ -29,8 +32,14 @@ contract TokenSwapPortal {
     // Function to swap tokens
     function swapToken() public {
         uint amount = tokenToReceive.balanceOf(msg.sender);
-        tokenToReceive.transferFrom(msg.sender, address(this), amount);
-        tokenToSend.transfer(msg.sender, amount);
+        require(amount > 0, "User has 0 tokens to give.");
+
+        bool status = tokenToReceive.transferFrom(msg.sender, address(this), amount);
+        require(status, "transferFrom is false.");
+
+        bool statusTransfer = tokenToSend.transfer(msg.sender, amount);
+        require(statusTransfer, "transfer status is false");
+
         totalTokensSwapped = totalTokensSwapped.add(amount);
     }
 
@@ -39,8 +48,8 @@ contract TokenSwapPortal {
     function withdrawTokenIfStuck(address token, uint amount)
     public
     {
-        require(token != address(tokenToSend) && token != address(tokenToReceive));
-        require(msg.sender == deployer);
+        require(token != address(tokenToSend) && token != address(tokenToReceive), "Can not withdraw tokens which are for swaps");
+        require(msg.sender == deployer, "Can be called only by deployer.");
         IERC20(token).transfer(deployer, amount);
     }
 }

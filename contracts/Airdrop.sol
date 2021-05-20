@@ -18,6 +18,10 @@ contract Airdrop {
     event TokensAirdropped(address beneficiary, uint256 amount);
 
     constructor(address _signerAddress, uint256 _airdropAmountPerWallet, address _airdropToken) public {
+        require(_signerAddress != address(0));
+        require(_airdropAmountPerWallet != address(0));
+        require(_airdropToken != address(0));
+
         signerAddress = _signerAddress;
         airdropAmountPerWallet = _airdropAmountPerWallet;
         airdropToken = IERC20(_airdropToken);
@@ -30,6 +34,8 @@ contract Airdrop {
         require(wasClaimed[beneficiary] == false, "Already claimed!");
 
         airdropToken.transfer(beneficiary, airdropAmountPerWallet);
+
+        totalTokensWithdrawn = totalTokensWithdrawn.add(airdropAmountPerWallet);
 
         emit TokensAirdropped(beneficiary, airdropAmountPerWallet);
         wasClaimed[msg.sender] = true;

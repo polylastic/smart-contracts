@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 
 contract Airdrop {
 
-    using ECDSA for *;
+    using ECDSA for bytes32;
 
     IERC20 public airdropToken;
 

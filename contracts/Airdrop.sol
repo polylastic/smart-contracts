@@ -30,15 +30,16 @@ contract Airdrop {
     function withdrawTokens(bytes memory signature) public {
         address beneficiary = msg.sender;
 
-        require(checkSignature(signature, beneficiary) == true, "Not eligible to claim tokens!");
-        require(wasClaimed[beneficiary] == false, "Already claimed!");
+        require(checkSignature(signature, beneficiary), "Not eligible to claim tokens!");
+        require(!wasClaimed[beneficiary], "Already claimed!");
+        wasClaimed[msg.sender] = true;
 
-        airdropToken.transfer(beneficiary, airdropAmountPerWallet);
+        bool status = airdropToken.transfer(beneficiary, airdropAmountPerWallet);
+        require(status, "Token transfer status is false.");
 
         totalTokensWithdrawn = totalTokensWithdrawn.add(airdropAmountPerWallet);
 
         emit TokensAirdropped(beneficiary, airdropAmountPerWallet);
-        wasClaimed[msg.sender] = true;
     }
 
     function getSigner(bytes memory signature, address beneficiary) public view returns (address) {

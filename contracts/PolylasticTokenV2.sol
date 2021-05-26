@@ -106,12 +106,18 @@ contract PolylasticTokenV2 is Context, IERC20 {
     pure
     returns (uint)
     {
-        // Fixed 2% fee on transfers less than 100 tokens
-        if(amountOfTokensToTransfer <= 100 * 10**18) {
-            return amountOfTokensToTransfer.mul(2).div(100);
+        if (amountOfTokensToTransfer <= (1000000).mul(10**18)) {
+            // Less than 1 mil POLX transacted (transferred/bought/sold) - 5% Tax
+            return amountOfTokensToTransfer.mul(5).div(100);
+        } else if (amountOfTokensToTransfer <= (5000000).mul(10**18)) {
+            // 1m - 5mil POLX transacted =  4% tax
+            return amountOfTokensToTransfer.mul(4).div(100);
+        } else if (amountOfTokensToTransfer <= (10000000).mul(10**18)) {
+            // 5mil+ POLX transacted: 3% Tax
+            return amountOfTokensToTransfer.mul(3).div(100);
         } else {
-            uint root = sqrt(amountOfTokensToTransfer);
-            return root.mul(10**9).div(5);
+            // 10 mil+ POLX transacted: 2% tax
+            return amountOfTokensToTransfer.mul(2).div(100);
         }
     }
 
@@ -125,23 +131,6 @@ contract PolylasticTokenV2 is Context, IERC20 {
         uint fee = computeTransferFeeInTokens(amountOfTokensToTransfer);
         // Return fee % in WEI units
         return fee.mul(10**18).mul(100).div(amountOfTokensToTransfer);
-    }
-
-
-    /**
-     * @notice Function to compute square root of a number
-     */
-    function sqrt(uint y) internal pure returns (uint z) {
-        if (y > 3) {
-            z = y;
-            uint x = y / 2 + 1;
-            while (x < z) {
-                z = x;
-                x = (y / x + x) / 2;
-            }
-        } else if (y != 0) {
-            z = 1;
-        }
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {

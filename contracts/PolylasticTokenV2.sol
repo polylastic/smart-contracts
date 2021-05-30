@@ -106,13 +106,13 @@ contract PolylasticTokenV2 is Context, IERC20 {
     pure
     returns (uint)
     {
-        if (amountOfTokensToTransfer <= (1000000).mul(10**18)) {
+        if (amountOfTokensToTransfer <= 1000000 * 10**18) {
             // Less than 1 mil POLX transacted (transferred/bought/sold) - 5% Tax
             return amountOfTokensToTransfer.mul(5).div(100);
-        } else if (amountOfTokensToTransfer <= (5000000).mul(10**18)) {
+        } else if (amountOfTokensToTransfer <= 5000000 * 10**18) {
             // 1m - 5mil POLX transacted =  4% tax
             return amountOfTokensToTransfer.mul(4).div(100);
-        } else if (amountOfTokensToTransfer <= (10000000).mul(10**18)) {
+        } else if (amountOfTokensToTransfer <= 10000000 * 10**18) {
             // 5mil+ POLX transacted: 3% Tax
             return amountOfTokensToTransfer.mul(3).div(100);
         } else {

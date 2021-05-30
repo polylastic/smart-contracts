@@ -2,10 +2,12 @@ pragma solidity 0.6.12;
 
 import "./IERC20.sol";
 import "@openzeppelin/contracts/cryptography/ECDSA.sol";
+import "./math/SafeMath.sol";
 
 contract Airdrop {
 
     using ECDSA for bytes32;
+    using SafeMath for *;
 
     IERC20 public airdropToken;
 
@@ -19,7 +21,7 @@ contract Airdrop {
 
     constructor(address _signerAddress, uint256 _airdropAmountPerWallet, address _airdropToken) public {
         require(_signerAddress != address(0));
-        require(_airdropAmountPerWallet != address(0));
+        require(_airdropAmountPerWallet != 0);
         require(_airdropToken != address(0));
 
         signerAddress = _signerAddress;
@@ -42,7 +44,7 @@ contract Airdrop {
         emit TokensAirdropped(beneficiary, airdropAmountPerWallet);
     }
 
-    function getSigner(bytes memory signature, address beneficiary) public view returns (address) {
+    function getSigner(bytes memory signature, address beneficiary) public pure returns (address) {
         bytes32 hash = keccak256(abi.encodePacked(beneficiary));
         bytes32 messageHash = hash.toEthSignedMessageHash();
         return messageHash.recover(signature);

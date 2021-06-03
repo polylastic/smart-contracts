@@ -1,0 +1,11 @@
+{
+    "testnet": {
+        "PolylasticToken": "0x3F488f5029d0892A830A6Bd8DB095D4a071eA3AF",
+        "PolylasticTokenV2": "0xd61570Bbf935530CC4bC6bD52A0703D295F082a6",
+        "Airdrop": "0x6481ecC686802C5367A39EF0485D0c8A290b2b3A",
+        "TokenSwapPortal": "0x3E024E505597B6ae11825e9771a83eD5e0691aDF"
+    },
+    "mainnet": {
+        "PolylasticToken": "0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0"
+    }
+}

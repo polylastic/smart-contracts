@@ -7,6 +7,8 @@
     },
     "mainnet": {
         "PolylasticToken": "0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0",
-        "PolylasticTokenV2": "0xbe510da084E084e3C27b20D79C135Dc841135c7F"
+        "PolylasticTokenV2": "0xbe510da084E084e3C27b20D79C135Dc841135c7F",
+        "Airdrop": "0x6d9441A2F3e0C036804B60B9a62D789E3BF0Ad8e",
+        "TokenSwapPortal": "0x3A366A907e181dF839662634c24B6D49A42D30d8"
     }
 }

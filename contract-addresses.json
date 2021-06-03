@@ -6,6 +6,7 @@
         "TokenSwapPortal": "0x3E024E505597B6ae11825e9771a83eD5e0691aDF"
     },
     "mainnet": {
-        "PolylasticToken": "0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0"
+        "PolylasticToken": "0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0",
+        "PolylasticTokenV2": "0xbe510da084E084e3C27b20D79C135Dc841135c7F"
     }
 }

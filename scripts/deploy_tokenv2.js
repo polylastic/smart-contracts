@@ -2,11 +2,11 @@ const hre = require("hardhat");
 const { getSavedContractAddresses, saveContractAddress } = require('./utils')
 
 async function main() {
-    const tokenName = "Polylastic";
+    const tokenName = "Polylastic V2";
     const symbol = "POLX";
     const totalSupply = "100000000000000000000000000000";
     const decimals = 18;
-    const treasury = '0x10AbD2aF6ebcc1b9b1bD19A6f4F33815d2856Cab';
+    const treasury = '0x85e9f188fA35F5cC2A4c627f2ea41b8DBFacf504';
 
     const PolylasticTokenV2 = await hre.ethers.getContractFactory("PolylasticTokenV2");
     const token = await PolylasticTokenV2.deploy(tokenName, symbol, totalSupply, decimals, treasury);

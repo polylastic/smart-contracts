@@ -5,6 +5,12 @@ _The Polylastic (POLX) Index is designed to track token performance within the e
 
 _This novel mechanism allows us to capture both technical innovation and community strength. Like traditional indices, Polylastic will track projects with significant usage and demand as well as those that show a vibrant community and commitment to ongoing development.._
 
+### TokenV2 with Network Taxation (Binance Smart Chain)
+- **Deployed to Binance Smart Chain**
+- **Token address:** `0xbe510da084E084e3C27b20D79C135Dc841135c7F`
+- **Verified source code:** https://bscscan.com/address/0xbe510da084E084e3C27b20D79C135Dc841135c7F#code
+
+
 ### Token (Binance Smart Chain)
 - **Deployed to Binance Smart Chain**
 - **Token address:** `0xE29aC6Ea53Dea5211155f9d7C8c41BeEE852EfA0`

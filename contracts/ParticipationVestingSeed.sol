@@ -5,9 +5,12 @@ import "./math/SafeMath.sol";
 import "./IERC20.sol";
 
 /// ParticipationVesting smart contract
-contract ParticipationVesting  {
+contract ParticipationVestingSeed  {
 
     using SafeMath for *;
+
+    uint public totalTokensToDistribute;
+    uint public totalTokensWithdrawn;
 
     struct Participation {
         uint256 initialPortion;
@@ -25,10 +28,7 @@ contract ParticipationVesting  {
 
     uint public initialPortionUnlockingTime;
     uint public numberOfPortions;
-    uint [] public distributionDates;
-
-    // Percent initially unlocked for withdrawal
-    uint public initiallyUnlockedPercent;
+    uint [] distributionDates;
 
     modifier onlyAdmin {
         require(msg.sender == adminWallet, "OnlyAdmin: Restricted access.");
@@ -41,7 +41,6 @@ contract ParticipationVesting  {
         uint timeBetweenPortions,
         uint distributionStartDate,
         uint _initialPortionUnlockingTime,
-        uint _initiallyUnlockedPercent,
         address _adminWallet,
         address _token
     )
@@ -51,8 +50,7 @@ contract ParticipationVesting  {
         adminWallet = _adminWallet;
         // Store number of portions
         numberOfPortions = _numberOfPortions;
-        // How many percent is unlocked at the beginning
-        initiallyUnlockedPercent = _initiallyUnlockedPercent;
+
         // Time when initial portion is unlocked
         initialPortionUnlockingTime = _initialPortionUnlockingTime;
 
@@ -64,19 +62,39 @@ contract ParticipationVesting  {
         token = IERC20(_token);
     }
 
+    // Function to register multiple participants at a time
+    function registerParticipants(
+        address [] memory participants,
+        uint256 [] memory participationAmounts
+    )
+    external
+    onlyAdmin
+    {
+        for(uint i = 0; i < participants.length; i++) {
+            registerParticipant(participants[i], participationAmounts[i]);
+        }
+    }
+
+
     /// Register participant
     function registerParticipant(
         address participant,
         uint participationAmount
     )
-    external
-    onlyAdmin
+    internal
     {
+        require(totalTokensToDistribute.sub(totalTokensWithdrawn).add(participationAmount) <= token.balanceOf(address(this)),
+            "Safeguarding existing token buyers. Not enough tokens."
+        );
+
+        totalTokensToDistribute = totalTokensToDistribute.add(participationAmount);
+
         require(hasParticipated[participant] == false, "User already registered as participant.");
-        // Compute initially unlocked percent
-        uint initialPortionAmount = participationAmount.mul(initiallyUnlockedPercent).div(100);
-        // Vested leftover
+
+        uint initialPortionAmount = participationAmount.mul(10).div(100);
+        // Vested 90%
         uint vestedAmount = participationAmount.sub(initialPortionAmount);
+
         // Compute amount per portion
         uint portionAmount = vestedAmount.div(numberOfPortions);
         bool[] memory isPortionWithdrawn = new bool[](numberOfPortions);
@@ -115,21 +133,22 @@ contract ParticipationVesting  {
             p.initialPortionWithdrawn = true;
         }
 
-        uint i = 0;
 
-        while (isPortionUnlocked(i) == true && i < distributionDates.length) {
-            // If portion is not withdrawn
-            if(!p.isVestedPortionWithdrawn[i]) {
-                // Add this portion to withdraw amount
-                totalToWithdraw = totalToWithdraw.add(p.amountPerPortion);
+        // For loop instead of while
+        for(uint i = 0 ; i < numberOfPortions ; i++) {
+            if(isPortionUnlocked(i) == true && i < distributionDates.length) {
+                if(!p.isVestedPortionWithdrawn[i]) {
+                    // Add this portion to withdraw amount
+                    totalToWithdraw = totalToWithdraw.add(p.amountPerPortion);
 
-                // Mark portion as withdrawn
-                p.isVestedPortionWithdrawn[i] = true;
+                    // Mark portion as withdrawn
+                    p.isVestedPortionWithdrawn[i] = true;
+                }
             }
-            // Increment counter
-            i++;
         }
 
+        // Account total tokens withdrawn.
+        totalTokensWithdrawn = totalTokensWithdrawn.add(totalToWithdraw);
         // Transfer all tokens to user
         token.transfer(user, totalToWithdraw);
     }
@@ -142,4 +161,34 @@ contract ParticipationVesting  {
         return block.timestamp >= distributionDates[portionId];
     }
 
+
+    function getParticipation(address account)
+    external
+    view
+    returns (uint256, uint256, uint256, bool, bool [] memory)
+    {
+        Participation memory p = addressToParticipation[account];
+        bool [] memory isVestedPortionWithdrawn = new bool [](numberOfPortions);
+
+        for(uint i=0; i < numberOfPortions; i++) {
+            isVestedPortionWithdrawn[i] = p.isVestedPortionWithdrawn[i];
+        }
+
+        return (
+        p.initialPortion,
+        p.vestedAmount,
+        p.amountPerPortion,
+        p.initialPortionWithdrawn,
+        isVestedPortionWithdrawn
+        );
+    }
+
+    // Get all distribution dates
+    function getDistributionDates()
+    external
+    view
+    returns (uint256 [] memory)
+    {
+        return distributionDates;
+    }
 }
